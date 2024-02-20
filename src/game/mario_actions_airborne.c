@@ -911,7 +911,14 @@ s32 act_ground_pound(struct MarioState *m) {
     f32 yOffset;
 
     play_sound_if_no_flag(m, SOUND_ACTION_THROW, MARIO_ACTION_SOUND_PLAYED);
-
+	if (m->input & INPUT_B_PRESSED) {
+		// Ground Pound Active State Effect
+		set_mario_action(m, ACT_DIVE, 0);
+		m->vel[1] = 30.0f; //Array line [0] = x, [1] = y, and [2] is Z
+		m->forwardVel = 40.0f; //x + z velocity
+		m->faceAngle[1] = m->intendedYaw; //forces angle to be in direction of analog yaw
+		return FALSE; //this ends the function early to prevent input and other variables from affecting dive
+	}
     if (m->actionState == 0) {
         if (m->actionTimer < 10) {
             yOffset = 20 - 2 * m->actionTimer;
